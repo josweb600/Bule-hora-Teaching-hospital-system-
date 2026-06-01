@@ -3,128 +3,389 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bule Hora Teaching Hospital System Portal</title>
+    <title>Bule Hora University Teaching Hospital — EHMS Workspace</title>
     <style>
         :root {
-            --primary: #0078d4;
-            --dark: #201f1e;
-            --light: #f3f2f1;
-            --success: #107c41;
+            --primary: #003366;
+            --primary-accent: #0056b3;
+            --primary-light: #e6f0fa;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --border: #cbd5e1;
+            --text-muted: #64748b;
+            --success: #166534;
+            --success-light: #f0fdf4;
+            --nginx-color: #009639;
+            --docker-color: #2496ed;
+            --postgres-color: #336791;
+            --redis-color: #dc2626;
+            --bash-color: #4eaa25;
         }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--light);
             color: var(--dark);
             margin: 0;
             padding: 0;
+            line-height: 1.5;
         }
+
         header {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-accent) 100%);
             color: white;
-            padding: 20px;
+            padding: 40px 20px;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.3rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+
+        header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
         .container {
-            max-width: 1000px;
-            margin: 30px auto;
-            padding: 0 20px;
+            max-width: 1280px;
+            margin: 40px auto;
+            padding: 0 24px;
         }
+
+        h2 {
+            font-size: 1.4rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+            margin-top: 45px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
+
         .card {
             background: white;
-            border-radius: 6px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            border-top: 4px solid var(--primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .card h3 {
-            margin-top: 0;
-            color: var(--primary);
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
-        .btn {
-            display: inline-block;
-            background-color: var(--primary);
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        .btn:hover {
-            opacity: 0.9;
-        }
-        .status-badge {
-            background-color: var(--success);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            display: inline-block;
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             margin-bottom: 10px;
         }
+
+        .card h3 {
+            margin: 0;
+            font-size: 1.15rem;
+            color: var(--dark);
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .badge-jsx { background-color: #e0f2fe; color: #0369a1; }
+        .badge-js { background-color: #f0fdf4; color: #166534; }
+        .badge-docker { background-color: #e0f2fe; color: var(--docker-color); }
+        .badge-nginx { background-color: #e6f7ed; color: var(--nginx-color); }
+        .badge-sql { background-color: #f1f5f9; color: var(--postgres-color); }
+        .badge-md { background-color: #fae8ff; color: #a21caf; }
+        .badge-sh { background-color: #f0fdf4; color: var(--bash-color); }
+        .badge-docx { background-color: #fef3c7; color: #d97706; }
+
+        .file-name {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 12px;
+            word-break: break-all;
+        }
+
+        .card p {
+            margin: 0 0 16px 0;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            display: inline-block;
+            text-align: center;
+            background-color: var(--primary-accent);
+            color: white;
+            padding: 10px 14px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: background-color 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: var(--primary);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-accent);
+            border: 1px solid var(--primary-accent);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+        }
+
         footer {
             text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            color: #666;
-            font-size: 0.9rem;
+            padding: 40px 20px;
+            margin-top: 60px;
+            background-color: #0b0f19;
+            color: #94a3b8;
+            font-size: 0.85rem;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Bule Hora Teaching Hospital System</h1>
-        <p>Local Development & Administrative Control Portal</p>
+        <h1>Bule Hora University Teaching Hospital</h1>
+        <p>Electronic Hospital Management System (EHMS) Comprehensive Stack Workspace</p>
     </header>
 
     <div class="container">
-        <h2>System Portals & Applications</h2>
+
+        <h2>🚀 Git & Repository Automation</h2>
         <div class="grid">
-            <div class="card">
-                <span class="status-badge">Frontend</span>
-                <h3>Patient Portal</h3>
-                <p>Access the patient interface to review medical registration, portal settings, and profile features.</p>
-                <a href="http://localhost:3000/patient" target="_blank" class="btn">Launch Portal</a>
+            
+            <div class="card" style="border-top: 4px solid var(--bash-color);">
+                <div class="card-header">
+                    <h3>Workspace Init & GitHub Setup</h3>
+                    <span class="badge badge-sh">Shell Script</span>
+                </div>
+                <span class="file-name">setup.sh</span>
+                <p>Automates the initialization of the complete project tree, checks dependencies (Node, NPM, Git), generates backend/frontend folder layers, and establishes remote tracking setups.</p>
+                <button class="btn" style="background-color: var(--bash-color);" onclick="alert('Run command in terminal:\nbash setup.sh')">Run Repository Initialization</button>
             </div>
 
-            <div class="card">
-                <span class="status-badge">Management</span>
-                <h3>Admin Dashboard</h3>
-                <p>Core administrative interface for monitoring system stats, staffing metrics, and clinical logs.</p>
-                <a href="http://localhost:3000/admin" target="_blank" class="btn">Open Dashboard</a>
+            <div class="card" style="border-top: 4px solid #a21caf;">
+                <div class="card-header">
+                    <h3>Enterprise Manifest Documentation</h3>
+                    <span class="badge badge-md">Markdown</span>
+                </div>
+                <span class="file-name">README.md</span>
+                <p>The master indexing manifest file describing project deliverables structure across 14 distinct system documents, 285+ catalog pages, and structural component blueprints.</p>
+                <button class="btn btn-outline" onclick="alert('EHMS Package Version: 1.0\nTarget Institution: Bule Hora University Teaching Hospitals')">Read Metadata Info</button>
             </div>
 
-            <div class="card">
-                <span class="status-badge">Server</span>
-                <h3>Backend Environment</h3>
-                <p>Local health systems core API infrastructure endpoints and database integration routing.</p>
-                <a href="http://localhost:5000/api" target="_blank" class="btn">Check API Status</a>
-            </div>
         </div>
 
-        <h2 style="margin-top: 40px;">Local Documentation References</h2>
+        <h2>⚡ Core Infrastructure & Services</h2>
         <div class="grid">
-            <div class="card" style="border-top-color: #512da8;">
-                <h3>Database Blueprint</h3>
-                <p>Review raw definitions within the <code>hospital_database_schema.sql</code> configuration file inside your workspace directory.</p>
+            
+            <div class="card" style="border-top: 4px solid var(--docker-color);">
+                <div class="card-header">
+                    <h3>Docker Orchestration</h3>
+                    <span class="badge badge-docker">Compose</span>
+                </div>
+                <span class="file-name">docker-compose.yml</span>
+                <p>Coordinates the deployment of the complete network: postgres, application backend, nginx frontend web services, redis caches, and administrative interfaces.</p>
+                <button class="btn" style="background-color: var(--docker-color);" onclick="alert('Run command in workspace root:\ndocker compose up -d --build')">Build & Start Cluster</button>
             </div>
-            <div class="card" style="border-top-color: #512da8;">
-                <h3>System Deployment Documentation</h3>
-                <p>Refer to <code>GitHub_and_React_Deployment_Guide.docx</code> for step-by-step pipeline builds.</p>
+
+            <div class="card" style="border-top: 4px solid var(--nginx-color);">
+                <div class="card-header">
+                    <h3>Frontend Proxy Web Server</h3>
+                    <span class="badge badge-nginx">Nginx Gateway</span>
+                </div>
+                <span class="file-name">nginx.conf & Dockerfile</span>
+                <p>Launches production assets on host port 3000, enforcing security directives and reverse-proxying application paths safely over to the API node server.</p>
+                <a href="http://localhost:3000" target="_blank" class="btn" style="background-color: var(--nginx-color);">Launch Frontend App</a>
             </div>
+
+            <div class="card" style="border-top: 4px solid var(--success);">
+                <div class="card-header">
+                    <h3>Backend Core API Engine</h3>
+                    <span class="badge badge-js">Express API</span>
+                </div>
+                <span class="file-name">server.js & Dockerfile</span>
+                <p>Express server orchestrating PostgreSQL pool endpoints, security processing pipelines via Helmet middleware configurations, and route allocations listening on port 3001.</p>
+                <a href="http://localhost:3001/api/health" target="_blank" class="btn" style="background-color: var(--success);">Verify Core Health API</a>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--postgres-color);">
+                <div class="card-header">
+                    <h3>Relational Database Schema</h3>
+                    <span class="badge badge-sql">PostgreSQL</span>
+                </div>
+                <span class="file-name">hospital_database_schema.sql</span>
+                <p>Initializes core platform schemas: secure user profiles, clinical encounter sheets, financial tracking entries, and systemic record trigger functions.</p>
+                <button class="btn btn-outline" onclick="alert('Database Credentials:\nDB Name: ehms\nUser: hospital_user\nPort: 5432')">Review DB Params</button>
+            </div>
+
         </div>
+
+        <h2>💻 Interface Applications & Functional Portals</h2>
+        <div class="grid">
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Integrated Hospital System</h3>
+                    <span class="badge badge-jsx">Main UI</span>
+                </div>
+                <span class="file-name">hospital_management_system.jsx</span>
+                <p>Comprehensive layout manager mapping out primary navigation bars, active appointment books, registration portals, and ledger modules.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Advanced Clinical Portal</h3>
+                    <span class="badge badge-jsx">Clinical Engine</span>
+                </div>
+                <span class="file-name">advanced_hospital_system.jsx</span>
+                <p>Dedicated physician runtime processing clinical logs: full chart records, real-time diagnostic laboratory request feeds, and imaging queues.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>System Administration Cockpit</h3>
+                    <span class="badge badge-jsx">Admin Stats</span>
+                </div>
+                <span class="file-name">admin_dashboard.jsx</span>
+                <p>Monitors clinical key tracking indicators (KPIs), operational system exceptions, personnel shift assignments, and outstanding medical bills.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Performance & Analytics Module</h3>
+                    <span class="badge badge-jsx">Analytics</span>
+                </div>
+                <span class="file-name">analytics_dashboard.jsx</span>
+                <p>Compiles operational indicators: bed turnover states, active financial budget graphs, clinical satisfaction tracking, and output metrics.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Patient Care Portal</h3>
+                    <span class="badge badge-jsx">Patient App</span>
+                </div>
+                <span class="file-name">patient_portal.jsx</span>
+                <p>Patient-facing system for self-service lookups: personal history tracking, consultation reservation requests, and prescription download records.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Competency Assessment Suite</h3>
+                    <span class="badge badge-jsx">Workforce Tool</span>
+                </div>
+                <span class="file-name">competency_assessment_tool.jsx</span>
+                <p>Workforce compliance testing application tracking user training logs, software validation profiles, and certification pathways.</p>
+            </div>
+
+        </div>
+
+        <h2>📐 Architectural Guidelines & Specifications</h2>
+        <div class="grid">
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>System Design Document</h3>
+                    <span class="badge badge-docx">Manual</span>
+                </div>
+                <span class="file-name">Bule_Hora_Hospital_Management_System_Design.docx</span>
+                <p>The engineering blueprint defining infrastructure topologies, departmental digitization scopes, security plans, and strategic phases.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>API Specification Ledger</h3>
+                    <span class="badge badge-docx">Reference</span>
+                </div>
+                <span class="file-name">API_Reference_Documentation.docx</span>
+                <p>Complete dictionary detailing operational routes, secure JWT authentication payloads, payload specifications, and status matrices.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Data Migration & Legacy Framework</h3>
+                    <span class="badge badge-docx">Migration Guide</span>
+                </div>
+                <span class="file-name">Data_Migration_and_Legacy_Integration_Guide.docx</span>
+                <p>Technical mapping protocol ensuring extraction, formatting parameters, target mapping, and verification loops for older archival items.</p>
+            </div>
+
+        </div>
+
+        <h2>⚙️ Operations, Observability & Readiness</h2>
+        <div class="grid">
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Deployment Roadmap Checklist</h3>
+                    <span class="badge badge-docx">Checklist</span>
+                </div>
+                <span class="file-name">Deployment_Checklist.docx</span>
+                <p>7-day deployment testing criteria mapping staging tasks, hot cutovers, schema sync loops, and fallback criteria parameters.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Advanced Telemetry & Telemetry Guide</h3>
+                    <span class="badge badge-docx">Observability</span>
+                </div>
+                <span class="file-name">Advanced_Monitoring_and_Alerting_Guide.docx</span>
+                <p>Details container tracing rules using Prometheus endpoints, indexing parameters, latency definitions, and call runbooks.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Staff Readiness Program</h3>
+                    <span class="badge badge-docx">Onboarding</span>
+                </div>
+                <span class="file-name">Comprehensive_Staff_Training_and_Onboarding.docx</span>
+                <p>Curriculums mapped across all clinical positions (Physicians, Attendants, Techs) paired with support contact structures.</p>
+            </div>
+
+        </div>
+
     </div>
 
     <footer>
-        <p>Bule Hora University Teaching Hospital EHMS Complete Package</p>
+        <p>© 2026 Bule Hora University — Unified EHMS System Workspace Infrastructure Environment</p>
     </footer>
 
 </body>
