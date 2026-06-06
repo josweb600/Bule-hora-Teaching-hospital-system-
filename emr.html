@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electronic Medical Records - Hospital EHMS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            gap: 10px;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .patient-header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .patient-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .info-field {
+            border-left: 3px solid #667eea;
+            padding-left: 15px;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-button:hover {
+            color: #667eea;
+        }
+
+        .tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .vital-signs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .vital {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .vital-label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .vital-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .vital-unit {
+            font-size: 12px;
+            color: #666;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .diagnosis-list {
+            list-style: none;
+        }
+
+        .diagnosis-list li {
+            padding: 12px;
+            background: #f9f9f9;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+        }
+
+        .medication-list {
+            list-style: none;
+        }
+
+        .medication-list li {
+            padding: 12px;
+            background: #f0f7ff;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #2196F3;
+        }
+
+        .medical-history {
+            list-style: none;
+        }
+
+        .medical-history li {
+            padding: 12px;
+            background: #fffbf0;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #FF9800;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        .print-btn {
+            background: #4CAF50;
+        }
+
+        .print-btn:hover {
+            background: #45a049;
+        }
+
+        .alert {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .alert.danger {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        @media print {
+            header, footer, .logout-btn, button:not(.print-btn) {
+                display: none;
+            }
+            body {
+                background: white;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .tabs {
+                flex-wrap: wrap;
+            }
+            .vital-signs {
+                grid-template-columns: 1fr;
+            }
+            table {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <span>🏥</span>
+                <span>Hospital EHMS - EMR System</span>
+            </div>
+            <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Patient Header -->
+        <div class="patient-header">
+            <h1 style="margin-bottom: 20px;">📋 Electronic Medical Record</h1>
+            <div class="patient-info">
+                <div class="info-field">
+                    <div class="info-label">Patient Name</div>
+                    <div class="info-value">Ahmed Hassan</div>
+                </div>
+                <div class="info-field">
+                    <div class="info-label">Medical Record #</div>
+                    <div class="info-value">MR-2024-001234</div>
+                </div>
+                <div class="info-field">
+                    <div class="info-label">Date of Birth</div>
+                    <div class="info-value">1979-03-15 (45 years)</div>
+                </div>
+                <div class="info-field">
+                    <div class="info-label">Gender</div>
+                    <div class="info-value">Male</div>
+                </div>
+                <div class="info-field">
+                    <div class="info-label">Blood Type</div>
+                    <div class="info-value">O+</div>
+                </div>
+                <div class="info-field">
+                    <div class="info-label">Contact</div>
+                    <div class="info-value">+251-911-123-456</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('vitals')">📊 Vital Signs</button>
+            <button class="tab-button" onclick="switchTab('diagnosis')">🔍 Diagnosis</button>
+            <button class="tab-button" onclick="switchTab('medications')">💊 Medications</button>
+            <button class="tab-button" onclick="switchTab('history')">📜 Medical History</button>
+            <button class="tab-button" onclick="switchTab('notes')">📝 Clinical Notes</button>
+        </div>
+
+        <!-- Vital Signs Tab -->
+        <div id="vitals" class="tab-content active">
+            <div class="section">
+                <h2>📊 Recent Vital Signs</h2>
+                <div class="vital-signs">
+                    <div class="vital">
+                        <div class="vital-label">Blood Pressure</div>
+                        <div class="vital-value">120<span class="vital-unit">/80</span></div>
+                        <div class="vital-unit">mmHg</div>
+                    </div>
+                    <div class="vital">
+                        <div class="vital-label">Heart Rate</div>
+                        <div class="vital-value">72<span class="vital-unit">bpm</span></div>
+                        <div class="vital-unit">Normal</div>
+                    </div>
+                    <div class="vital">
+                        <div class="vital-label">Temperature</div>
+                        <div class="vital-value">37.2<span class="vital-unit">°C</span></div>
+                        <div class="vital-unit">Normal</div>
+                    </div>
+                    <div class="vital">
+                        <div class="vital-label">Respiration Rate</div>
+                        <div class="vital-value">16<span class="vital-unit">/min</span></div>
+                        <div class="vital-unit">Normal</div>
+                    </div>
+                    <div class="vital">
+                        <div class="vital-label">Oxygen Saturation</div>
+                        <div class="vital-value">98<span class="vital-unit">%</span></div>
+                        <div class="vital-unit">Excellent</div>
+                    </div>
+                    <div class="vital">
+                        <div class="vital-label">Weight</div>
+                        <div class="vital-value">75<span class="vital-unit">kg</span></div>
+                        <div class="vital-unit">BMI: 23.4</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📈 Vital Signs History</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>BP</th>
+                            <th>HR</th>
+                            <th>Temp</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2024-06-05</td>
+                            <td>120/80</td>
+                            <td>72</td>
+                            <td>37.2°C</td>
+                            <td>Stable</td>
+                        </tr>
+                        <tr>
+                            <td>2024-05-28</td>
+                            <td>118/78</td>
+                            <td>70</td>
+                            <td>37.0°C</td>
+                            <td>Checkup</td>
+                        </tr>
+                        <tr>
+                            <td>2024-05-15</td>
+                            <td>122/82</td>
+                            <td>75</td>
+                            <td>37.3°C</td>
+                            <td>Follow-up</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Diagnosis Tab -->
+        <div id="diagnosis" class="tab-content">
+            <div class="section">
+                <h2>🔍 Current Diagnoses</h2>
+                <ul class="diagnosis-list">
+                    <li>
+                        <strong>Hypertension (Stage 1)</strong><br>
+                        <small>Code: I10 | Status: Ongoing | Since: 2022-03-15</small>
+                    </li>
+                    <li>
+                        <strong>Type 2 Diabetes Mellitus</strong><br>
+                        <small>Code: E11 | Status: Controlled | Since: 2020-06-10</small>
+                    </li>
+                    <li>
+                        <strong>Hyperlipidemia</strong><br>
+                        <small>Code: E78.5 | Status: Treatment | Since: 2021-11-20</small>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>📋 Previous Diagnoses</h2>
+                <ul class="diagnosis-list">
+                    <li>
+                        <strong>Acute Respiratory Infection</strong><br>
+                        <small>Resolved: 2024-01-15</small>
+                    </li>
+                    <li>
+                        <strong>Gastritis</strong><br>
+                        <small>Resolved: 2023-08-22</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Medications Tab -->
+        <div id="medications" class="tab-content">
+            <div class="section">
+                <h2>💊 Current Medications</h2>
+                <ul class="medication-list">
+                    <li>
+                        <strong>Lisinopril</strong> - 10mg<br>
+                        <small>Once daily | For: Hypertension | Started: 2022-04-01</small>
+                    </li>
+                    <li>
+                        <strong>Metformin</strong> - 500mg<br>
+                        <small>Twice daily | For: Type 2 Diabetes | Started: 2020-07-15</small>
+                    </li>
+                    <li>
+                        <strong>Atorvastatin</strong> - 20mg<br>
+                        <small>Once daily at bedtime | For: Cholesterol | Started: 2021-12-01</small>
+                    </li>
+                    <li>
+                        <strong>Aspirin</strong> - 81mg<br>
+                        <small>Once daily | For: Cardiovascular protection | Started: 2022-03-15</small>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>⚠️ Medication Allergies</h2>
+                <div class="alert danger">
+                    <strong>⚠️ Penicillin:</strong> Anaphylaxis (Severe)<br>
+                    <strong>⚠️ Sulfonamides:</strong> Rash (Mild)
+                </div>
+            </div>
+        </div>
+
+        <!-- Medical History Tab -->
+        <div id="history" class="tab-content">
+            <div class="section">
+                <h2>📜 Medical History</h2>
+                <ul class="medical-history">
+                    <li>
+                        <strong>2015:</strong> Appendectomy (Surgery - Successful)
+                    </li>
+                    <li>
+                        <strong>2018:</strong> Hernia Repair (Surgery - Successful)
+                    </li>
+                    <li>
+                        <strong>2020:</strong> Diabetes diagnosis
+                    </li>
+                    <li>
+                        <strong>2022:</strong> Hypertension diagnosis
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>👨‍👩‍👧‍👦 Family Medical History</h2>
+                <ul class="medical-history">
+                    <li><strong>Father:</strong> Hypertension, Type 2 Diabetes</li>
+                    <li><strong>Mother:</strong> Hypertension</li>
+                    <li><strong>Siblings:</strong> No significant medical history</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Clinical Notes Tab -->
+        <div id="notes" class="tab-content">
+            <div class="section">
+                <h2>📝 Latest Clinical Note</h2>
+                <div style="background: #f9f9f9; padding: 15px; border-radius: 5px; border-left: 3px solid #667eea;">
+                    <p><strong>Date:</strong> June 5, 2024</p>
+                    <p><strong>Provider:</strong> Dr. Fatima Mohammed</p>
+                    <p style="margin-top: 15px;"><strong>Chief Complaint:</strong> Regular follow-up for chronic conditions</p>
+                    <p style="margin-top: 10px;"><strong>History of Present Illness:</strong> Patient reports doing well overall. No new complaints. Taking medications as prescribed. Denies fever, cough, or shortness of breath.</p>
+                    <p style="margin-top: 10px;"><strong>Physical Examination:</strong> BP 120/80, HR 72, RR 16, Temp 37.2°C. Weight stable. General: Alert and oriented. Lungs clear to auscultation. Heart regular rate and rhythm. Abdomen soft and non-tender.</p>
+                    <p style="margin-top: 10px;"><strong>Assessment:</strong> 
+                    <ul style="margin-left: 20px; margin-top: 5px;">
+                        <li>Hypertension - well controlled</li>
+                        <li>Type 2 Diabetes - good control (A1C: 6.8%)</li>
+                        <li>Hyperlipidemia - controlled</li>
+                    </ul>
+                    </p>
+                    <p style="margin-top: 10px;"><strong>Plan:</strong> Continue current medications. Recheck labs in 3 months. Follow-up appointment in 3 months. Encouraged patient to continue exercise and healthy diet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="text-align: center; margin: 30px 0;">
+            <button onclick="window.print()" class="print-btn">🖨️ Print EMR</button>
+            <button onclick="downloadPDF()">📥 Download PDF</button>
+            <button onclick="goBack()">⬅️ Back to Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Bule Hora University Teaching Hospitals - EHMS</p>
+    </footer>
+
+    <script>
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+
+        function downloadPDF() {
+            alert('📥 PDF download feature would integrate with a backend service.\n\nFor demo: Use browser print to save as PDF');
+        }
+
+        function goBack() {
+            window.location.href = 'hospital-dashboard.html';
+        }
+
+        // Check if user is logged in
+        window.onload = function() {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        };
+    </script>
+</body>
+</html>
